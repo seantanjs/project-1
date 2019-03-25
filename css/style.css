@@ -1,0 +1,35 @@
+html {
+	background-image: url("../images/star-wars_1024.jpg");
+
+	 height: 100%;
+	 width: 100%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+td {
+	border: 1px solid black;
+	margin: 40px;
+	padding: 50px;
+	width: 30px;
+	height: 30px;
+	background-color: grey;
+}
+
+.container {
+	display: flex;
+	justify-content: center;
+}
+
+h1 {
+	display: flex;
+	justify-content: center;
+	color: white;
+}
+
+.container2 {
+	display: flex;
+	justify-content: center;
+}
