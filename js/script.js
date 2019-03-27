@@ -28,6 +28,8 @@
 //         //when the cell is clicked, the image within the cell is set to visible to reveal the image
 //         this.querySelector("img").style.visibility = "visible";
 
+//         var foo = this.querySelector("flip-card-inner");
+
 //         //after clicking on the cell, we "disable" the cell to prevent the user from clicking on it again
 //         this.removeEventListener("click", flip);
 
@@ -106,26 +108,29 @@
 //         openedCards[1].querySelector("img").style.visibility = "hidden";
 //         enable();
 //         openedCards = [];
-//      }, 1500);
+//      }, 1000);
 // }
 
 // //get all cell elements on the DOM
-// var cell1 = document.getElementById("cell1");
-// var cell2 = document.getElementById("cell2");
-// var cell3 = document.getElementById("cell3");
-// var cell4 = document.getElementById("cell4");
+// // var cell1 = document.getElementById("cell1");
+// // var cell2 = document.getElementById("cell2");
+// // var cell3 = document.getElementById("cell3");
+// // var cell4 = document.getElementById("cell4");
 
 // //initialize all images within each cell to be hidden by default
-// cell1.firstElementChild.style.visibility = "hidden"
-// cell2.firstElementChild.style.visibility = "hidden"
-// cell3.firstElementChild.style.visibility = "hidden"
-// cell4.firstElementChild.style.visibility = "hidden"
+// // cell1.firstElementChild.style.visibility = "hidden"
+// // cell2.firstElementChild.style.visibility = "hidden"
+// // cell3.firstElementChild.style.visibility = "hidden"
+// // cell4.firstElementChild.style.visibility = "hidden"
 
 // //add click event listener to each cell element, with each click triggering the flip function
-// cell1.addEventListener("click", flip);
-// cell2.addEventListener("click", flip);
-// cell3.addEventListener("click", flip);
-// cell4.addEventListener("click", flip);
+// // cell1.addEventListener("click", flip);
+// // cell2.addEventListener("click", flip);
+// // cell3.addEventListener("click", flip);
+// // cell4.addEventListener("click", flip);
+
+// var flipcard = document.querySelector("flip-card-inner");
+// flipCard
 
 
 
@@ -278,7 +283,7 @@ var createGameBoard = function (gameBoardDimensions) {
 
 //create a table element which will be the parent node
     var table = document.createElement("table");
-    table.id = ''
+    table.id = '';
 
 
     console.log(gameBoardDimensions[0]);
@@ -325,6 +330,7 @@ var createGameBoard = function (gameBoardDimensions) {
     // console.log(table);
     return table;
 }
+
 
 //function to fill up each cell with images
 var fillUpCellWithImages = function(table) {
@@ -407,7 +413,7 @@ console.log(selectedImgShuffled);
             var eachCell = document.getElementById("img-" + i + "-" + j);
                 // eachCell.src = selectedImg[imgIndex];
                 eachCell.setAttribute("src", selectedImgShuffled[imgIndex]);
-                console.log(selectedImgShuffled[imgIndex]);
+                // console.log(selectedImgShuffled[imgIndex]);
                 imgIndex++;
         }
     }
@@ -415,6 +421,63 @@ console.log(selectedImgShuffled);
 
 }
 
+//initialize an array which tracks the number of matched pairs which will be compared against the no of images pairs in the above line to determine win condition
+var matchedPairs = [];
+
+// initialize moves count variable to store the no. of clicks user take
+var moves = 0;
+
+//restart function which scrambles the images on the board and make the hidden matched cells visible again, moves counter restarted. User able to restart his game
+var restart = function() {
+
+    //reset the moves counter to zero
+    moves = 0;
+    //reset the no. of matched pairs counter, otherwise checkWinStatus() function will not behave as expected
+    matchedPairs = [];
+
+    //update the moves counter content to "0 MOVES"
+    var movesCounterContent = document.querySelector("#moves-counter .modal-content p");
+
+    movesCounterContent.textContent = "0 MOVES";
+
+    //upon restart, retrieve all cells and make them visible so that those pairs hidden due to being matched, will be visible again
+    var allCells = document.querySelectorAll("td");
+
+    for(var i=0; i<allCells.length; i++) {
+        allCells[i].style.visibility = "visible";
+        allCells[i].addEventListener("click", flip);
+    }
+
+//upon restart, reshuffle the images on the whole board
+    var boardImagesArr = [];
+    var allImages = document.querySelectorAll("img");
+    console.log(allImages);
+
+//loop through each of the images and push each of them into the image array which will be shuffled
+    for(var j=0; j<allImages.length; j++) {
+        var imageSrc = allImages[j].src
+        boardImagesArr.push(imageSrc);
+    }
+
+//call the shuffle function to randomize the images in the array
+    var selectedImgShuffled = shuffle(boardImagesArr);
+
+    //use the newly shuffled images array to fill up the table cells again
+
+    var imgIndex = 0;
+
+    //for loop to sequentially fill up every cell of the table again with the newly randomized images in the array
+    for (var i = 0; i < table.rows.length; i++) {
+        for(var j=0; j < table.rows[i].cells.length; j++) {
+            var eachCell = document.getElementById("img-" + i + "-" + j);
+                // eachCell.src = selectedImg[imgIndex];
+                eachCell.setAttribute("src", selectedImgShuffled[imgIndex]);
+                // console.log(selectedImgShuffled[imgIndex]);
+                imgIndex++;
+        }
+    }
+
+}
 //shuffle function to shuffle the images position within the selectedImg array
 var shuffle = function(selectedImg) {
 
@@ -430,15 +493,25 @@ var shuffle = function(selectedImg) {
     return selectedImg;
 }
 
+//function to record the current moves/clicks counter and display it on the page
+var moveCounter = function() {
+   var movesCounter = document.querySelector("#moves-counter .modal-content p");
+   movesCounter.textContent = moves + " MOVES"
+}
 
 //initialize an array which is used as a condition to check if the user has selected a pair of cells for comparison
 var openedCards = [];
 
-//initialize an array which tracks the number of matched pairs which will be compared against the no of images pairs in the above line to determine win condition
-var matchedPairs = [];
 
 //flip function triggered upon clicking on a cell element
 var flip = function(event) {
+
+        //increment moves counter each time a cell is clicked
+        moves++;
+
+        //each time a click is registered, call the moveCounter() function to register the no. of clicks by user
+        moveCounter();
+
 
         //each time a cell element was clicked, push that cell element into the openCards array
         openedCards.push(this);
@@ -532,7 +605,7 @@ var unmatched = function() {
         openedCards[1].querySelector("img").style.visibility = "hidden";
         enable();
         openedCards = [];
-     }, 1500);
+     }, 1000);
 }
 
 

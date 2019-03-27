@@ -7,17 +7,40 @@
   </head>
   <body>
 
-    <h1>Unveil the background image!</h1>
+    <div class="header">
+        <h1>Star Wars Memory Game</h1>
+        <h1>Unveil the background image!</h1>
+
+        <div class="flex-container">
+
+            <div id="moves-counter" class="modal">
+              <div class="modal-content">
+                <p>0 MOVES</p>
+            </div>
+        </div>
+
+        <div id="restart" class="modal" onclick="restart()">
+            <div class="modal-content">
+                <p> RESTART </p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
 
 <!-- Non-MVP -->
-    <div class="container">
+    <div class="container col-sm-12 col-md-4">
         <div class="gameBoard"></div>
     </div>
 <!-- Non-MVP -->
 
 
 <!-- MVP -->
-<<!-- div class="container2">
+<!-- <div class="container2">
     <table id="table">
         <tr>
             <td id="cell1">
@@ -38,6 +61,7 @@
     </table>
 </div> -->
 <!-- MVP -->
+
 
 <script type="text/javascript" src="js/script.js"></script>
 
